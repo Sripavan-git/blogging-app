@@ -1,13 +1,17 @@
 package com.pavan.blogapp.services.Impl;
 
+import com.pavan.blogapp.exceptions.ResourceNotFoundException;
 import com.pavan.blogapp.modals.User;
 import com.pavan.blogapp.payloads.UserDTO;
 import com.pavan.blogapp.repositories.UserRepository;
 import com.pavan.blogapp.services.UserService;
+import com.pavan.blogapp.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,22 +26,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO userDTO, Long userId) {
-        return null;
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id ", userId));
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setAbout(userDTO.getAbout());
+
+        User updatedUser = this.userRepository.save(user);
+        return this.userToDTO(updatedUser);
     }
 
     @Override
     public UserDTO getUserById(Long userId) {
-        return null;
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id ", userId));
+        return this.userToDTO(user);
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return List.of();
+        return this.userRepository.findAll().stream().map(user -> userToDTO(user)).toList();
     }
 
     @Override
     public void deleteUser(Long userId) {
-
+        User user =  this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id ", userId));
+        this.userRepository.delete(user);
     }
 
     private User dtoToUser(UserDTO userDTO) {
