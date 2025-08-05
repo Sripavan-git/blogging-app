@@ -6,6 +6,7 @@ import com.pavan.blogapp.payloads.UserDTO;
 import com.pavan.blogapp.repositories.UserRepository;
 import com.pavan.blogapp.services.UserService;
 import com.pavan.blogapp.exceptions.ResourceNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         User savedUser = userRepository.save(dtoToUser(userDTO));
@@ -54,24 +60,24 @@ public class UserServiceImpl implements UserService {
     }
 
     private User dtoToUser(UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setName(userDTO.getName());
-        user.setAbout(userDTO.getAbout());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+        //User uesr = new User();
+        //user.setId(userDTO.getId());
+        //user.setName(userDTO.getName());
+        //user.setAbout(userDTO.getAbout());
+        //user.setEmail(userDTO.getEmail());
+        //user.setPassword(userDTO.getPassword());
 
-        return user;
+        return this.modelMapper.map(userDTO, User.class);
     }
 
     private UserDTO userToDTO(User user ) {
-        UserDTO userDTO = new UserDTO();
+        /*UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setAbout(user.getAbout());
         userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
+        userDTO.setPassword(user.getPassword());*/
 
-        return userDTO;
+        return this.modelMapper.map(user, UserDTO.class);
     }
 }
