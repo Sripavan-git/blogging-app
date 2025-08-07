@@ -3,6 +3,7 @@ package com.pavan.blogapp.controllers;
 import com.pavan.blogapp.payloads.ApiResponse;
 import com.pavan.blogapp.payloads.CategoryDTO;
 import com.pavan.blogapp.services.CategorySevice;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CategoryController {
     private CategorySevice categorySevice;
 
     @PostMapping("/")
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         return new ResponseEntity<>(categorySevice.createCategory(categoryDTO), HttpStatus.CREATED);
     }
 
@@ -33,7 +34,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
         return new ResponseEntity<>(categorySevice.updateCategory(categoryDTO, categoryId), HttpStatus.OK);
     }
 
