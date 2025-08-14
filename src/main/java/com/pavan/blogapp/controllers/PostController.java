@@ -1,5 +1,6 @@
 package com.pavan.blogapp.controllers;
 
+import com.pavan.blogapp.payloads.ApiResponse;
 import com.pavan.blogapp.payloads.PostDTO;
 import com.pavan.blogapp.repositories.PostRepository;
 import com.pavan.blogapp.services.PostService;
@@ -53,5 +54,17 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostById(postId), HttpStatus.OK);
     }
 
+    // Update Post
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Long postId){
+        return new ResponseEntity<>(postService.updatePost(postDTO, postId), HttpStatus.OK);
+    }
+
+    // Delete Post by Id
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Long postId){
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(new ApiResponse("Post with "+ postId + " deleted Sucessfully ", true), HttpStatus.OK);
+    }
 
 }
